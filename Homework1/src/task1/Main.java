@@ -100,6 +100,6 @@ public class Main {
             }
         }
 
-        return answer/count;
+        return (double)answer/count;
     }
 }
