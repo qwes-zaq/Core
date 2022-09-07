@@ -63,25 +63,23 @@ public class Main {
         System.out.println("Duplicate filtered, grouped by name, sorted by name and id:");
         System.out.println();
         TreeMap<String, ArrayList<Integer>> dictionary = deleteDuplicatesAndSort();
-        for(Map.Entry<String, ArrayList<Integer>> item : dictionary.entrySet()){
-            System.out.println("Key: "+item.getKey());
-            System.out.println("Value: "+item.getValue().size());
+        for (Map.Entry<String, ArrayList<Integer>> item : dictionary.entrySet()) {
+            System.out.println("Key: " + item.getKey());
+            System.out.println("Value: " + item.getValue().size());
         }
     }
 
-    public static TreeMap<String, ArrayList<Integer>> deleteDuplicatesAndSort(){
+    public static TreeMap<String, ArrayList<Integer>> deleteDuplicatesAndSort() {
         List<Person> distinctList = Arrays.stream(RAW_DATA).distinct().toList();
         TreeMap<String, ArrayList<Integer>> answer = new TreeMap<>();
-        for(Person item : distinctList){
-            if(!answer.containsKey(item.name)) {
+
+        for (Person item : distinctList) {
+            if (!answer.containsKey(item.name)) {
                 answer.put(item.name, new ArrayList<>());
-                answer.get(item.name).add(item.id);
             }
-            else {
-                answer.get(item.name).add(item.id);
-            }
+            answer.get(item.name).add(item.id);
         }
-        for(var item : answer.values()){
+        for (var item : answer.values()) {
             Collections.sort(item);
         }
         return answer;
