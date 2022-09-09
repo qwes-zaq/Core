@@ -1,15 +1,23 @@
 package task3;
 
-import java.util.stream.Collectors;
-
 public class Main {
     public static boolean fuzzySearch(String searchString, String input) {
-        String result = input.chars().mapToObj(i -> (char) i)
-                .filter(x -> searchString.contains("" + x))
-                .map(String::valueOf)
-                .collect(Collectors.joining());
+        if (searchString == null || input == null) {
+            return false;
+        }
 
-        return result.contains(searchString);
+        int searchStringIndex = 0;
+
+        for (int i = 0; i < input.length(); i++) {
+            if (searchString.charAt(searchStringIndex) == input.charAt(i)) {
+                searchStringIndex++;
+                if (searchStringIndex == searchString.length()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public static void main(String[] args) {

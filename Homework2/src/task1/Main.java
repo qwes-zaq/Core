@@ -1,6 +1,7 @@
 package task1;
 
 import java.util.*;
+import java.util.Comparator;
 
 public class Main {
     static class Person {
@@ -21,6 +22,7 @@ public class Main {
             return name;
         }
 
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -31,6 +33,30 @@ public class Main {
         @Override
         public int hashCode() {
             return Objects.hash(getId(), getName());
+        }
+
+
+    }
+
+    static class PersonComparator implements Comparator<Person> {
+
+        public int compare(Person person1, Person person2) {
+            if (person1.name.equals(person2.name)) {
+                return person1.id - person2.id;
+            }
+            int minLength = Math.min(person1.name.length(), person2.name.length());
+            int answer = 0;
+            for (int i = 0; i < minLength; i++) {
+                if (person1.name.charAt(i) > person2.name.charAt(i)) {
+                    answer = 1;
+                    break;
+                } else if (person1.name.charAt(i) < person2.name.charAt(i)) {
+                    answer = -1;
+                    break;
+                }
+            }
+
+            return answer;
         }
     }
 
@@ -62,26 +88,29 @@ public class Main {
         System.out.println();
         System.out.println("Duplicate filtered, grouped by name, sorted by name and id:");
         System.out.println();
-        TreeMap<String, ArrayList<Integer>> dictionary = deleteDuplicatesAndSort();
-        for (Map.Entry<String, ArrayList<Integer>> item : dictionary.entrySet()) {
-            System.out.println("Key: " + item.getKey());
-            System.out.println("Value: " + item.getValue().size());
+
+        if (RAW_DATA == null) {
+            System.out.println("RAW_DATA equal null");
         }
-    }
 
-    public static TreeMap<String, ArrayList<Integer>> deleteDuplicatesAndSort() {
-        List<Person> distinctList = Arrays.stream(RAW_DATA).distinct().toList();
-        TreeMap<String, ArrayList<Integer>> answer = new TreeMap<>();
+        List<Person> sortedList = Arrays.stream(RAW_DATA).distinct().sorted(new PersonComparator()).toList();
+        String currentName = sortedList.get(0).name;
+        int count = 1;
 
-        for (Person item : distinctList) {
-            if (!answer.containsKey(item.name)) {
-                answer.put(item.name, new ArrayList<>());
+        for (int i = 1; i < sortedList.size(); i++) {
+            if (currentName.equals(sortedList.get(i).name)) {
+                count++;
+            } else {
+                System.out.println("Key: " + currentName);
+                System.out.println("Value: " + count);
+                currentName = sortedList.get(i).name;
+                count = 1;
             }
-            answer.get(item.name).add(item.id);
+            if (i == sortedList.size() - 1) {
+                System.out.println("Key: " + currentName);
+                System.out.println("Value: " + count);
+            }
         }
-        for (var item : answer.values()) {
-            Collections.sort(item);
-        }
-        return answer;
+
     }
 }

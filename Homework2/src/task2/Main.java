@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 public class Main {
     public static int[] getPair(int[] inputArray, int sum) {
+        if (inputArray == null) {
+            return null;
+        }
+
         int[] arr = Arrays.stream(inputArray)
                 .sorted()
                 .filter(x -> x <= sum)
