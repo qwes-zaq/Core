@@ -22,7 +22,6 @@ public class Main {
             return name;
         }
 
-
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -89,8 +88,9 @@ public class Main {
         System.out.println("Duplicate filtered, grouped by name, sorted by name and id:");
         System.out.println();
 
-        if (RAW_DATA == null) {
+        if (RAW_DATA == null || RAW_DATA.length==0) {
             System.out.println("RAW_DATA equal null");
+            return;
         }
 
         List<Person> sortedList = Arrays.stream(RAW_DATA).distinct().sorted(new PersonComparator()).toList();
@@ -106,11 +106,9 @@ public class Main {
                 currentName = sortedList.get(i).name;
                 count = 1;
             }
-            if (i == sortedList.size() - 1) {
-                System.out.println("Key: " + currentName);
-                System.out.println("Value: " + count);
-            }
         }
+        System.out.println("Key: " + currentName);
+        System.out.println("Value: " + count);
 
     }
 }
