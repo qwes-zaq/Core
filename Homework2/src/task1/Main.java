@@ -2,6 +2,7 @@ package task1;
 
 import java.util.*;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class Main {
     static class Person {
@@ -60,18 +61,18 @@ public class Main {
     }
 
     private static Person[] RAW_DATA = new Person[]{
+            new Person(8, "Amelia"),
+            new Person(7, "Amelia"),
             new Person(0, "Harry"),
+            new Person(4, "Jack"),
+            new Person(6, "Amelia"),
+            new Person(5, "Amelia"),
+            new Person(2, "Harry"),
             new Person(0, "Harry"), // дубликат
             new Person(1, "Harry"), // тёзка
-            new Person(2, "Harry"),
             new Person(3, "Emily"),
             new Person(4, "Jack"),
-            new Person(4, "Jack"),
             new Person(5, "Amelia"),
-            new Person(5, "Amelia"),
-            new Person(6, "Amelia"),
-            new Person(7, "Amelia"),
-            new Person(8, "Amelia"),
     };
 
     public static void main(String[] args) {
@@ -93,22 +94,16 @@ public class Main {
             return;
         }
 
-        List<Person> sortedList = Arrays.stream(RAW_DATA).distinct().sorted(new PersonComparator()).toList();
-        String currentName = sortedList.get(0).name;
-        int count = 1;
+        Map<String, List<Person>> tmp = Arrays.stream(RAW_DATA)
+                .distinct()
+                .collect(Collectors.groupingBy(Person::getName));
+        TreeMap<String, List<Person>> groupedByNameMap = new TreeMap<>(tmp);
 
-        for (int i = 1; i < sortedList.size(); i++) {
-            if (currentName.equals(sortedList.get(i).name)) {
-                count++;
-            } else {
-                System.out.println("Key: " + currentName);
-                System.out.println("Value: " + count);
-                currentName = sortedList.get(i).name;
-                count = 1;
-            }
+        for (String key: groupedByNameMap.keySet()){
+            groupedByNameMap.get(key).sort(new PersonComparator());
+            System.out.println("Key: " + key);
+            System.out.println("Value: " + groupedByNameMap.get(key).size());
         }
-        System.out.println("Key: " + currentName);
-        System.out.println("Value: " + count);
 
     }
 }
